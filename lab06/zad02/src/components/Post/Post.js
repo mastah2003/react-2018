@@ -4,24 +4,31 @@ import Title from "../Title/Title";
 import Image from "../Image/Image";
 import Text from "../Text/Text";
 import Rating from "../Rating/Rating";
+import withLanguage from "../withLanguage/withLanguage";
 
-import { LanguageConsumer } from "../LanguageContext/LanguageContext";
+class Post extends React.Component {
+  state = {
+    rating: this.props.rating
+  };
 
-const onStarCLick = i => alert(`click ${i} star`);
+  onStarCLick = i => {
+    this.setState({
+      rating: i
+    });
+  };
 
-const Post = ({ title, image, text, rating }) => {
-  return (
-    <LanguageConsumer>
-      {value => (
-        <div>
-          <Title title={title[value]} />
-          <Image url={image} />
-          <Rating rating={rating} onChange={onStarCLick} />
-          <Text text={text[value]} />
-        </div>
-      )}
-    </LanguageConsumer>
-  );
-};
+  render() {
+    const { title, image, text, language } = this.props;
+    const { rating } = this.state;
+    return (
+      <div>
+        <Title title={title[language]} />
+        <Image url={image} />
+        <Rating rating={rating} onChange={this.onStarCLick} />
+        <Text text={text[language]} />
+      </div>
+    );
+  }
+}
 
-export default Post;
+export default withLanguage(Post);
